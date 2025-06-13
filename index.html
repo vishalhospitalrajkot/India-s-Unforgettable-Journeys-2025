@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India's Top 20 Destinations for 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A dashboard-style single-page application. The core is an interactive filter system allowing users to select travel themes (e.g., Heritage, Adventure, Spiritual, Nature). This dynamically updates a grid of destination cards. Clicking a card opens a modal with detailed information including descriptions and highlights. This structure was chosen over a linear report to empower users to explore content based on their personal interests, making the dense information more accessible and engaging. A summary chart provides a quick visual overview of the travel themes' prevalence across the top 20 destinations. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Full list of 20 destinations with extensive details. Goal: Organize & Explore. Viz/Presentation: Interactive card grid with dynamic filters and rich detail modals. Interaction: Users click filter buttons to narrow down destinations by type and "Learn More" on cards to access comprehensive details. Justification: This approach provides a highly digestible and interactive way to consume a large amount of information, facilitating user-driven exploration. The data now includes detailed paragraphs provided by the user. Library/Method: Vanilla JS for DOM manipulation and state management.
+        - Report Info: Primary appeal categories for all 20 destinations. Goal: Compare & Inform. Viz/Presentation: Horizontal Bar Chart. Interaction: Static visualization with tooltips on hover. Justification: The bar chart clearly visualizes the distribution of destination types, allowing for quick insights into India's diverse travel landscape. Library/Method: Chart.js (Canvas).
+        - Report Info: Specific key points and introduction. Goal: Inform. Viz/Presentation: Integrated into the header and introductory sections. Justification: This ensures the user is immediately aware of the purpose and scope of the application. Library/Method: HTML text blocks.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .modal-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .modal-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .modal-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div id="app" class="container mx-auto p-4 sm:p-6 md:p-8">
+
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-amber-800 mb-2">India's Unforgettable Journeys 2025</h1>
+            <p class="text-lg text-stone-600 max-w-3xl mx-auto">India is a land of incredible diversity, offering a rich tapestry of history, culture, natural beauty, and spiritual experiences. Whether you're drawn to ancient landmarks, serene landscapes, vibrant cities, or unique events, this list of the top 20 places to visit in India in 2025 has something for every traveler. From iconic wonders to offbeat gems, these destinations promise unforgettable adventures.</p>
+        </header>
+
+        <main>
+            <section id="filters" class="mb-10">
+                <div class="intro-text mb-6 text-center">
+                     <h2 class="text-2xl font-bold mb-2">Find Your Perfect Destination</h2>
+                     <p class="text-stone-600 max-w-2xl mx-auto">This curated list blends India’s iconic landmarks with hidden treasures and special events, ensuring a diverse and memorable journey in 2025. Whether you seek history, nature, adventure, or spirituality, these destinations promise an extraordinary experience in one of the world’s most captivating countries.</p>
+                </div>
+                <div id="filter-buttons" class="flex flex-wrap justify-center gap-2 md:gap-3">
+                </div>
+            </section>
+
+            <section id="destinations" class="mb-12">
+                 <div id="destinations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                 </div>
+            </section>
+
+            <section id="visual-summary" class="bg-white p-6 rounded-2xl shadow-lg">
+                 <div class="intro-text mb-6 text-center">
+                     <h2 class="text-2xl font-bold mb-2">Travel Themes at a Glance</h2>
+                     <p class="text-stone-600 max-w-2xl mx-auto">This chart provides a visual breakdown of the top 20 destinations by their core appeal. It helps to quickly understand the types of experiences that are prominent in India for 2025, showing the balance between cultural, natural, and spiritual journeys available.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="appealChart"></canvas>
+                </div>
+            </section>
+
+            <section id="contact-us" class="mt-12 pt-8 border-t border-stone-200">
+                <h2 class="text-3xl font-bold text-amber-800 mb-6 text-center">Contact Us</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold text-stone-700 mb-3">Vishal Hospital Rajkot</h3>
+                        <p class="text-stone-600 mb-2"><strong>Address:</strong> Vishal Hospital, Kailashwadi Main Road, Opposite Taluka Polish Choki, Junction Plot, Rajkot, Gujarat 360001</p>
+                        <p class="text-stone-600 mb-2"><strong>Mobile:</strong> 9228105245</p>
+                        <p class="text-stone-600 mb-2"><strong>Landline:</strong> 0281-2450408</p>
+                        <p class="text-stone-600"><a href="https://vishalhospitalrajkot.github.io/" target="_blank" class="text-blue-600 hover:underline">Website</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold text-stone-700 mb-3">Vishal Banquet Hall</h3>
+                        <p class="text-stone-600 mb-2"><strong>Address:</strong> Vishal Banquet Hall, Gaya-Dobhi Rd, Musatpura, Bihar 823004</p>
+                        <p class="text-stone-600 mb-2"><strong>Mobile:</strong> 9228105245</p>
+                        <p class="text-stone-600"><a href="https://vishalbanquethall1.github.io/" target="_blank" class="text-blue-600 hover:underline">Website</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold text-stone-700 mb-3">Vishal Hospital Bodh Gaya</h3>
+                        <p class="text-stone-600 mb-2"><strong>Address:</strong> Vishal Hospital, Gaya-Dobhi Rd, Musatpura, Bihar 823004</p>
+                        <p class="text-stone-600 mb-2"><strong>Mobile:</strong> 9228105245</p>
+                        <p class="text-stone-600"><a href="https://vishalhospitalrajkot.github.io/vishalhospitalbodhgaya/" target="_blank" class="text-blue-600 hover:underline">Website</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-xl font-semibold text-stone-700 mb-3">Dr. Anoop Lal Sinha</h3>
+                        <p class="text-stone-600 mb-2"><strong>Mobile:</strong> 9228105245</p>
+                        <p class="text-stone-600"><a href="https://vishalhospitalrajkot.github.io/Dr.AnoopLalSinha/" target="_blank" class="text-blue-600 hover:underline">Website</a></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-12 pt-8 border-t border-stone-200">
+            <p class="text-stone-500">Curated from the "India's Unforgettable Journeys" Report | 2025 Edition</p>
+        </footer>
+
+    </div>
+
+    <div id="destinationModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-stone-200 flex justify-between items-center">
+                <h3 id="modal-title" class="text-2xl font-bold text-amber-800"></h3>
+                <button id="closeModal" class="text-stone-500 hover:text-stone-800 text-3xl">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6 overflow-y-auto modal-scrollbar">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const rawDestinationsData = [
+                { rank: 1, name: "Taj Mahal", location: "Agra, Uttar Pradesh", description: "A timeless symbol of love and one of the Seven Wonders of the World, the Taj Mahal is an architectural marvel made of white marble. Its historical significance and breathtaking beauty make it an essential stop for any visitor to India." },
+                { rank: 2, name: "Jaipur", location: "Rajasthan", description: "Known as the \"Pink City,\" Jaipur is a vibrant blend of royal heritage and colorful markets. Highlights include the Amber Fort, City Palace, and Hawa Mahal, showcasing India's regal past." },
+                { rank: 3, name: "Varanasi", location: "Uttar Pradesh", description: "One of the world’s oldest living cities, Varanasi is a spiritual hub along the Ganges River. Witness the captivating Ganga Aarti ceremony and explore its ancient temples and sacred ghats." },
+                { rank: 4, name: "Goa", location: "Goa", description: "Famous for its sandy beaches, lively nightlife, and Portuguese-influenced architecture, Goa is a coastal paradise perfect for relaxation, water sports, and cultural exploration." },
+                { rank: 5, name: "Kerala Backwaters", location: "Kerala", description: "This tranquil network of lagoons and canals offers a unique experience aboard traditional houseboats, surrounded by lush greenery and serene waters—a must for nature lovers." },
+                { rank: 6, name: "Leh-Ladakh", location: "Jammu & Kashmir", description: "A haven for adventure enthusiasts, Leh-Ladakh boasts rugged landscapes, high-altitude passes, and Buddhist monasteries. It’s ideal for trekking, biking, and soaking in stunning views." },
+                { rank: 7, name: "Rishikesh", location: "Uttarakhand", description: "Dubbed the \"Yoga Capital of the World,\" Rishikesh offers spiritual retreats, yoga sessions, and thrilling river rafting on the Ganges, blending peace with excitement." },
+                { rank: 8, name: "Hampi", location: "Karnataka", description: "A UNESCO World Heritage site, Hampi transports visitors to the ancient Vijayanagara Empire with its sprawling ruins, temples, and palaces—perfect for history buffs." },
+                { rank: 9, name: "Andaman and Nicobar Islands", location: "Union Territory", description: "With pristine beaches, clear waters, and vibrant coral reefs, the Andamans are a tropical paradise ideal for snorkeling, scuba diving, and unwinding in nature." },
+                { rank: 10, name: "Darjeeling", location: "West Bengal", description: "This charming hill station is renowned for its tea gardens, the scenic Darjeeling Himalayan Railway (Toy Train), and panoramic views of the Himalayas." },
+                { rank: 11, name: "Udaipur", location: "Rajasthan", description: "Known as the \"City of Lakes,\" Udaipur enchants with its romantic palaces, serene lakes, and historic sites like the Lake Palace, offering a fairy-tale-like experience." },
+                { rank: 12, name: "Mysore", location: "Karnataka", description: "Home to the grand Mysore Palace, this city is steeped in royal heritage and known for its cultural vibrancy, especially during the Dussehra festival." },
+                { rank: 13, name: "Amritsar", location: "Punjab", description: "The spiritual center of Sikhism, Amritsar is home to the Golden Temple, a stunning shrine. The nearby Wagah Border ceremony adds a patriotic flair to the visit." },
+                { rank: 14, name: "Khajuraho", location: "Madhya Pradesh", description: "Famous for its UNESCO-listed temples featuring intricate erotic sculptures, Khajuraho showcases India’s artistic and architectural brilliance." },
+                { rank: 15, name: "Sikkim", location: "Sikkim", description: "Nestled in the Himalayas, Sikkim offers breathtaking mountain vistas, Buddhist monasteries, and adventure opportunities like trekking and rafting." },
+                { rank: 16, name: "Spiti Valley", location: "Himachal Pradesh", description: "A remote gem, Spiti Valley captivates with its stark landscapes, ancient monasteries, and unique Buddhist culture—perfect for intrepid explorers." },
+                { rank: 17, name: "Gokarna", location: "Karnataka", description: "A quieter alternative to Goa, Gokarna offers pristine beaches, a laid-back vibe, and ancient temples, blending relaxation with spirituality." },
+                { rank: 18, name: "Majuli", location: "Assam", description: "The world’s largest river island, Majuli is a cultural treasure known for its vibrant festivals, traditional Assamese heritage, and tranquil surroundings." },
+                { rank: 19, name: "Jaisalmer", location: "Rajasthan", description: "Dubbed the \"Golden City,\" Jaisalmer is famous for its golden fort, desert safaris, and the chance to camp under the stars in the Thar Desert." },
+                { rank: 20, name: "Prayagraj", location: "Uttar Pradesh", description: "In 2025, Prayagraj will host the Kumbh Mela (January-February), one of the largest religious gatherings globally, drawing millions for its spiritual and cultural significance." }
+            ];
+
+            // Helper function to get additional details based on destination name
+            function getAdditionalDetails(dName) {
+                let noteworthy = '';
+                let idealMonths = '';
+                let tip = '';
+                let nearbyAttractions = '';
+
+                switch (dName) {
+                    case "Taj Mahal":
+                        noteworthy = "Night‑time laser shows at the Taj are debuting in 2025.";
+                        idealMonths = "Oct–Mar";
+                        tip = "Buy tickets online ahead, and allow time for security checks; summer (Apr–Jun) can be extremely hot.";
+                        nearbyAttractions = "Agra Fort, Fatehpur Sikri, Itmad-ud-Daulah";
+                        break;
+                    case "Jaipur":
+                        noteworthy = "2025 sees the restoration of several havelis, enriching its heritage circuit.";
+                        idealMonths = "Oct–Mar";
+                        tip = "Traffic can be heavy; consider a heritage cycle tour or walking tour in the old city.";
+                        nearbyAttractions = "Amber Fort, City Palace, Hawa Mahal, Nahargarh Fort";
+                        break;
+                    case "Varanasi":
+                        idealMonths = "Nov–Feb";
+                        tip = "Stay in a haveli near the ghats to experience Varanasi’s old-world charm.";
+                        nearbyAttractions = "Sarnath, Kashi Vishwanath Temple, Sankat Mochan Hanuman Temple";
+                        break;
+                    case "Goa":
+                        idealMonths = "Nov–Feb";
+                        tip = "Rent a scooter to explore hidden beaches in South Goa (e.g. Agonda, Cola) and sample Goan seafood at beach shacks.";
+                        nearbyAttractions = "Basilica of Bom Jesus, Dudhsagar Falls, Spice Plantations";
+                        break;
+                    case "Kerala Backwaters":
+                        noteworthy = "In 2025, new boutique stays are redefining “slow travel” here.";
+                        idealMonths = "Oct–Feb";
+                        tip = "Sample Kerala cuisine (appam, seafood curry) and catch a Kathakali dance show.";
+                        nearbyAttractions = "Periyar Tiger Reserve, Munnar (tea gardens), Kumarakom houseboats";
+                        break;
+                    case "Leh-Ladakh":
+                        idealMonths = "June–September";
+                        tip = "Acclimatize gradually in Leh, drink bottled water and avoid strenuous hiking on the first day.";
+                        nearbyAttractions = "Pangong & Tso Moriri Lakes, Nubra Valley, Khardung La Pass";
+                        break;
+                    case "Rishikesh":
+                        idealMonths = "Sept–Nov, Feb–Apr";
+                        tip = "Dress modestly in ashram areas and book rafting well in advance.";
+                        nearbyAttractions = "Haridwar (Ganga Aarti), Triveni Ghat, Neer Garh Waterfall";
+                        break;
+                    case "Hampi":
+                        noteworthy = "In 2025, a new interpretation centre will deepen insights into its UNESCO‑listed temples.";
+                        idealMonths = "Oct–Feb";
+                        tip = "Rent a bicycle or scooter for effortless touring between temples; carry plenty of water and sunscreen.";
+                        nearbyAttractions = "Anegundi, Pattadakal (UNESCO)";
+                        break;
+                    case "Andaman and Nicobar Islands":
+                        noteworthy = "Growing ferry links to the Nicobars are opening up lesser‑visited isles this season.";
+                        idealMonths = "Oct–May";
+                        tip = "For privacy and nature, try 02 Island (Elephant Beach) or Jolly Buoy Island for snorkeling (requires forest permit).";
+                        nearbyAttractions = "Cellular Jail (Port Blair), Radhanagar Beach, Mahatma Gandhi Marine National Park";
+                        break;
+                    case "Darjeeling":
+                        noteworthy = "Upgraded heritage coaches begin service this spring.";
+                        idealMonths = "Oct–Dec";
+                        tip = "Early‑morning tea garden tours and the Himalayan Mountaineering Institute (with a zoo) are family‑friendly.";
+                        nearbyAttractions = "Kurseong, Mirik Lake, Tiger Hill (viewpoint)";
+                        break;
+                    case "Udaipur":
+                        noteworthy = "A UNESCO‑approved light-and-sound show at Jag Mandir launches this year.";
+                        idealMonths = "Oct–Mar";
+                        tip = "Boat rides at sunset on Lake Pichola (views of the Palace) are a must; spring (Feb–Mar) offers clear skies and blossoming bougainvillea.";
+                        nearbyAttractions = "Lake Pichola, Kumbhalgarh Fort, Ranakpur Jain Temple";
+                        break;
+                    case "Mysore":
+                        noteworthy = "Expanded cultural programmes around Dussehra fortify its festival fame.";
+                        idealMonths = "Oct–Mar";
+                        tip = "Visit Mysore Palace on Sundays or public holidays for spectacular illumination.";
+                        nearbyAttractions = "Chamundi Hills, Brindavan Gardens, Srirangapatna";
+                        break;
+                    case "Amritsar":
+                        noteworthy = "Golden Temple and Partition Museum under new conservation projects this year.";
+                        idealMonths = "Nov–Mar";
+                        tip = "Cover your head inside the Golden Temple and wash your feet before entering the marble courtyard.";
+                        nearbyAttractions = "Wagah Border, Jallianwala Bagh, Durgiana Temple";
+                        break;
+                    case "Khajuraho":
+                        noteworthy = "A new evening‑light projection show will illuminate their artistry beginning later this year.";
+                        idealMonths = "Oct–Mar";
+                        tip = "Hire a local guide to understand the intricate carvings and their history.";
+                        nearbyAttractions = "Panna National Park, Raneh Falls";
+                        break;
+                    case "Sikkim":
+                        noteworthy = "Improved road access to Yumthang and Nathula Pass makes offbeat Sikkim more reachable in 2025.";
+                        idealMonths = "April‑June, Oct‑Nov";
+                        tip = "Obtain necessary permits for restricted areas like Nathula Pass and North Sikkim.";
+                        nearbyAttractions = "Gangtok, Pelling, Ravangla";
+                        break;
+                    case "Spiti Valley":
+                        idealMonths = "June‑September";
+                        tip = "Ensure you are acclimatized for high altitudes and carry warm clothing year-round.";
+                        nearbyAttractions = "Key Monastery, Tabo Monastery, Pin Valley National Park";
+                        break;
+                    case "Gokarna":
+                        idealMonths = "Oct-Mar";
+                        tip = "Find serene beaches like Om Beach and Half Moon Beach for a relaxed vibe.";
+                        nearbyAttractions = "Om Beach, Half Moon Beach, Mahabaleshwar Temple";
+                        break;
+                    case "Majuli":
+                        idealMonths = "Nov-Mar";
+                        tip = "Explore the Vaishnavite monasteries (Sattras) and witness traditional mask-making.";
+                        nearbyAttractions = "Auniati Satra, Garamurh Satra, Samaguri Satra";
+                        break;
+                    case "Jaisalmer":
+                        idealMonths = "Oct–Mar";
+                        tip = "Explore the living Jaisalmer Fort and enjoy a desert safari.";
+                        nearbyAttractions = "Patwon Ki Haveli, Gadisar Lake";
+                        break;
+                    case "Prayagraj":
+                        noteworthy = "In 2025, Prayagraj will host the Kumbh Mela (January-February), one of the largest religious gatherings globally.";
+                        idealMonths = "Jan-Feb (Kumbh Mela)";
+                        tip = "Plan accommodation and travel well in advance, especially during Kumbh Mela.";
+                        nearbyAttractions = "Triveni Sangam, Anand Bhavan, Khusro Bagh";
+                        break;
+                    case "Delhi":
+                        idealMonths = "Oct–Mar";
+                        tip = "Book a rickshaw tour of the Red Fort area and plan at least a day in each part of the city.";
+                        nearbyAttractions = "Red Fort, Qutub Minar, Humayun’s Tomb, India Gate";
+                        break;
+                    // Add other cases as needed, ensuring each name has a case.
+                    default:
+                        // Default values if no specific case matches
+                        noteworthy = '';
+                        idealMonths = '';
+                        tip = '';
+                        nearbyAttractions = '';
+                }
+                return { noteworthy, idealMonths, tip, nearbyAttractions };
+            }
+
+
+            const destinations = rawDestinationsData.map(d => {
+                let appeal = "General Interest";
+                let icon = "🌟";
+                let keyHighlights = d.description.split('. ')[0] + '.'; // Default to first sentence
+
+                if (d.name.includes("Taj Mahal") || d.name.includes("Agra")) { appeal = "Iconic Heritage"; icon = "🏛️"; keyHighlights = "A timeless symbol of love, architectural marvel, historical significance."; }
+                else if (d.name.includes("Jaipur")) { appeal = "Royal Heritage"; icon = "👑"; keyHighlights = "Vibrant blend of royal heritage and colorful markets. Highlights include Amber Fort, City Palace, Hawa Mahal."; }
+                else if (d.name.includes("Varanasi")) { appeal = "Spiritual & Ancient City"; icon = "🙏"; keyHighlights = "World’s oldest living city, spiritual hub, Ganga Aarti, ancient temples, sacred ghats."; }
+                else if (d.name.includes("Goa")) { appeal = "Coastal & Leisure"; icon = "🏖️"; keyHighlights = "Sandy beaches, lively nightlife, Portuguese-influenced architecture, water sports, cultural exploration."; }
+                else if (d.name.includes("Kerala Backwaters")) { appeal = "Backwater & Nature"; icon = "🛶"; keyHighlights = "Tranquil network of lagoons and canals, unique experience aboard traditional houseboats, lush greenery."; }
+                else if (d.name.includes("Leh-Ladakh") || d.name.includes("Spiti Valley") || d.name.includes("Nubra Valley")) { appeal = "High-Altitude Adventure"; icon = "🏔️"; keyHighlights = "Rugged landscapes, high-altitude passes, Buddhist monasteries, trekking, biking, stunning views."; }
+                else if (d.name.includes("Rishikesh")) { appeal = "Spiritual & Adventure"; icon = "🧘"; keyHighlights = "Yoga Capital of the World, spiritual retreats, yoga sessions, thrilling river rafting on the Ganges."; }
+                else if (d.name.includes("Hampi")) { appeal = "Ancient Ruins & Art"; icon = "🗿"; keyHighlights = "UNESCO World Heritage site, sprawling ruins, temples, palaces of Vijayanagara Empire."; }
+                else if (d.name.includes("Andaman and Nicobar Islands")) { appeal = "Coastal & Island Escapes"; icon = "🏝️"; keyHighlights = "Pristine beaches, clear waters, vibrant coral reefs, ideal for snorkeling, scuba diving, unwinding."; }
+                else if (d.name.includes("Darjeeling")) { appeal = "Hill Station & Heritage"; icon = "⛰️"; keyHighlights = "Charming hill station, tea gardens, Darjeeling Himalayan Railway (Toy Train), panoramic views of Himalayas."; }
+                else if (d.name.includes("Udaipur")) { appeal = "Royal & Lakeside"; icon = "💖"; keyHighlights = "City of Lakes, romantic palaces, serene lakes, historic sites like the Lake Palace."; }
+                else if (d.name.includes("Mysore")) { appeal = "Royal City & Culture"; icon = "🕌"; keyHighlights = "Grand Mysore Palace, royal heritage, cultural vibrancy, Dussehra festival."; }
+                else if (d.name.includes("Amritsar")) { appeal = "Spiritual & Cultural"; icon = "✨"; keyHighlights = "Spiritual center of Sikhism, Golden Temple, stunning shrine, Wagah Border ceremony."; }
+                else if (d.name.includes("Khajuraho")) { appeal = "Ancient Ruins & Art"; icon = "🎨"; keyHighlights = "UNESCO-listed temples, intricate erotic sculptures, artistic and architectural brilliance."; }
+                else if (d.name.includes("Sikkim")) { appeal = "Himalayan Nature"; icon = "🏞️"; keyHighlights = "Breathtaking mountain vistas, Buddhist monasteries, adventure opportunities, trekking, rafting."; }
+                else if (d.name.includes("Gokarna")) { appeal = "Coastal & Spiritual"; icon = "🧘‍♀️"; keyHighlights = "Quieter alternative to Goa, pristine beaches, laid-back vibe, ancient temples."; }
+                else if (d.name.includes("Majuli")) { appeal = "Cultural & Riverine"; icon = "🌿"; keyHighlights = "World’s largest river island, cultural treasure, vibrant festivals, traditional Assamese heritage."; }
+                else if (d.name.includes("Jaisalmer")) { appeal = "Royal & Desert Heritage"; icon = "🐪"; keyHighlights = "Golden City, golden fort, desert safaris, camping under the stars in Thar Desert."; }
+                else if (d.name.includes("Prayagraj")) { appeal = "Spiritual Event"; icon = "🕉️"; keyHighlights = "Host of Kumbh Mela (January-February 2025), one of the largest religious gatherings globally, spiritual and cultural significance."; }
+                else if (d.name.includes("Delhi")) { appeal = "Urban & Historical Metropolis"; icon = "🏙️"; keyHighlights = "Vibrant capital, historic monuments (Red Fort, Qutub Minar, Humayun’s Tomb), bustling markets, rich urban flavor."; }
+
+                const additionalDetails = getAdditionalDetails(d.name);
+
+                return {
+                    rank: d.rank,
+                    name: d.name,
+                    location: d.location,
+                    description: d.description,
+                    keyExperience: keyHighlights,
+                    noteworthy: additionalDetails.noteworthy,
+                    idealMonths: additionalDetails.idealMonths,
+                    tip: additionalDetails.tip,
+                    nearbyAttractions: additionalDetails.nearbyAttractions,
+                    appeal: appeal,
+                    icon: icon
+                };
+            });
+
+            const filterButtonsContainer = document.getElementById('filter-buttons');
+            const destinationsGrid = document.getElementById('destinations-grid');
+            const modal = document.getElementById('destinationModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+
+            let activeFilter = 'All';
+
+            const uniqueAppeals = ['All', ...new Set(destinations.map(d => d.appeal))].sort();
+
+            const appealColors = {
+                'All': 'bg-amber-700 text-white',
+                'Iconic Heritage': 'bg-orange-100 text-orange-800',
+                'Royal Heritage': 'bg-red-100 text-red-800',
+                'Spiritual & Ancient City': 'bg-purple-100 text-purple-800',
+                'Coastal & Leisure': 'bg-cyan-100 text-cyan-800',
+                'Backwater & Nature': 'bg-teal-100 text-teal-800',
+                'High-Altitude Adventure': 'bg-sky-100 text-sky-800',
+                'Spiritual & Adventure': 'bg-green-100 text-green-800',
+                'Ancient Ruins & Art': 'bg-stone-200 text-stone-800',
+                'Coastal & Island Escapes': 'bg-blue-100 text-blue-800',
+                'Hill Station & Heritage': 'bg-emerald-100 text-emerald-800',
+                'Royal & Lakeside': 'bg-pink-100 text-pink-800',
+                'Royal City & Culture': 'bg-rose-100 text-rose-800',
+                'Spiritual & Cultural': 'bg-yellow-100 text-yellow-800',
+                'Himalayan Nature': 'bg-indigo-100 text-indigo-800',
+                'Coastal & Spiritual': 'bg-lime-100 text-lime-800',
+                'Cultural & Riverine': 'bg-fuchsia-100 text-fuchsia-800',
+                'Royal & Desert Heritage': 'bg-orange-200 text-orange-900',
+                'Spiritual Event': 'bg-violet-100 text-violet-800',
+                'Urban & Historical Metropolis': 'bg-slate-100 text-slate-800',
+                'General Interest': 'bg-neutral-200 text-neutral-800',
+            };
+
+            const renderFilters = () => {
+                filterButtonsContainer.innerHTML = uniqueAppeals.map(appeal => `
+                    <button class="filter-btn py-2 px-4 rounded-full text-sm font-semibold transition-all duration-200 ${activeFilter === appeal ? appealColors[appeal] : 'bg-white text-stone-700 hover:bg-stone-100'}" data-filter="${appeal}">
+                        ${appeal}
+                    </button>
+                `).join('');
+            };
+
+            const renderDestinations = () => {
+                const filteredDestinations = activeFilter === 'All' ? destinations : destinations.filter(d => d.appeal === activeFilter);
+                destinationsGrid.innerHTML = filteredDestinations.map(d => `
+                    <div class="destination-card bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden" data-appeal="${d.appeal}">
+                        <div class="p-5 flex-grow">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">${d.icon}</span>
+                                <span class="text-sm font-bold text-amber-600 bg-amber-100 py-1 px-2 rounded-full">#${d.rank}</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-1">${d.name}</h3>
+                            <p class="text-sm text-stone-500">${d.appeal} <br> <span class="text-xs text-stone-400">${d.location}</span></p>
+                        </div>
+                        <div class="p-5 bg-stone-50">
+                             <button class="learn-more-btn w-full bg-amber-700 text-white py-2 px-4 rounded-lg font-semibold hover:bg-amber-800 transition-colors duration-200" data-rank="${d.rank}">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const openModal = (destination) => {
+                modalTitle.textContent = `${destination.rank}. ${destination.name}`;
+                modalContent.innerHTML = `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Description:</h4>
+                            <p class="text-lg text-stone-700">${destination.description}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Key Highlights:</h4>
+                            <p class="text-stone-600">${destination.keyExperience}</p>
+                        </div>
+                        ${destination.noteworthy ? `
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Noteworthy for 2025:</h4>
+                            <p class="text-stone-600">${destination.noteworthy}</p>
+                        </div>` : ''}
+                        ${destination.idealMonths ? `
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Ideal Months:</h4>
+                            <p class="text-stone-600">${destination.idealMonths}</p>
+                        </div>` : ''}
+                        ${destination.tip ? `
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Travel Tip:</h4>
+                            <p class="text-stone-600">${destination.tip}</p>
+                        </div>` : ''}
+                        ${destination.nearbyAttractions ? `
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-2 text-lg">Nearby Attractions:</h4>
+                            <p class="text-stone-600">${destination.nearbyAttractions}</p>
+                        </div>` : ''}
+                        <div>
+                            <p class="text-sm text-stone-500 mt-4">Location: ${destination.location}</p>
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => modal.querySelector('div').classList.remove('scale-95'), 10);
+            };
+
+            const closeModal = () => {
+                modal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            };
+
+            filterButtonsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    activeFilter = e.target.dataset.filter;
+                    renderFilters();
+                    renderDestinations();
+                }
+            });
+
+            destinationsGrid.addEventListener('click', (e) => {
+                const button = e.target.closest('.learn-more-btn');
+                if (button) {
+                    const rank = parseInt(button.dataset.rank);
+                    const destination = destinations.find(d => d.rank === rank);
+                    if (destination) {
+                        openModal(destination);
+                    }
+                }
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            const appealCounts = destinations.reduce((acc, d) => {
+                acc[d.appeal] = (acc[d.appeal] || 0) + 1;
+                return acc;
+            }, {});
+
+            const sortedAppeals = Object.entries(appealCounts).sort(([,a],[,b]) => b-a);
+
+            const chartLabels = sortedAppeals.map(item => item[0]);
+            const chartData = sortedAppeals.map(item => item[1]);
+            const chartBackgroundColors = chartLabels.map(label => {
+                const colorClass = appealColors[label];
+                return colorClass ? colorClass.replace('text-', 'bg-').replace('-100', '-200').split(' ')[0] : 'bg-stone-200';
+            });
+            const chartBorderColors = chartLabels.map(label => {
+                const colorClass = appealColors[label];
+                return colorClass ? colorClass.replace('text-', 'border-').replace('-100', '-400').split(' ')[0] : 'border-stone-400';
+            });
+
+
+            const ctx = document.getElementById('appealChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Number of Destinations',
+                        data: chartData,
+                        backgroundColor: chartBackgroundColors,
+                        borderColor: chartBorderColors,
+                        borderWidth: 1,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        },
+                        y: {
+                           ticks: {
+                                autoSkip: false,
+                                callback: function(value) {
+                                    const label = this.getLabelForValue(value);
+                                    if (label.length > 25) {
+                                        return label.slice(0, 25) + '...';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Destination Count by Primary Appeal',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            renderFilters();
+            renderDestinations();
+        });
+    </script>
+</body>
+</html>
